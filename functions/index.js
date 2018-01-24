@@ -7,8 +7,12 @@ admin.initializeApp(functions.config().firebase);
 
 // Listens for new tries added to /testsubjects/:userId/:patternId/:tryId and
 // veriefies the try with the refcode
-exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/{tryId}/')
+exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/{tryId}/data')
     .onWrite(event => {
+
+      let uid = event.params.userId;
+      let patternId = event.params.patternId;
+      let tryId = event.params.tryId;
 
       // Grab the current value of what was written to the Realtime Database.
       const original = event.data.val();

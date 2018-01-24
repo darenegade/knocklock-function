@@ -8,17 +8,28 @@ admin.initializeApp(functions.config().firebase);
 // Listens for new tries added to /testsubjects/:userId/:patternId/:tryId and
 // veriefies the try with the refcode
 exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/{tryId}/data')
-    .onWrite(event => {
+    .onCreate(event => {
 
       let uid = event.params.userId;
       let patternId = event.params.patternId;
       let tryId = event.params.tryId;
 
       // Grab the current value of what was written to the Realtime Database.
-      const original = event.data.val();
-      console.log('Authorize: ', event.params.userId, event.params.patternId, event.params.tryId, original);
+      const tryData = event.data.val();
+      console.log('Authorize: ', event.params.userId, event.params.patternId, event.params.tryId, tryData);
       
       //DO SOME MAGIC HERE
 
-      return event.data.ref.parent.child('locked').set(true);
+
+      //Just for Testing
+      //Remove after Magic happens
+      event.data.ref.parent.parent.child('locked').once('value', locked => {
+
+        if(locked.val() === true) {
+          return event.data.ref.parent.parent.child('locked').set(false);
+        } else {
+          return event.data.ref.parent.parent.child('locked').set(true);
+        }
+
+      })
     });

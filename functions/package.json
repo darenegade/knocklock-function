@@ -1,0 +1,13 @@
+{
+  "name": "knocklock-functions",
+  "description": "Auth via Knocklock",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darenegade/knocklock-function.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "firebase-admin": "^5.8.1",
+    "firebase-functions": "^0.8.1"
+  }
+}

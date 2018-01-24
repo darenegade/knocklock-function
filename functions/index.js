@@ -23,7 +23,7 @@ exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/
 
       //Just for Testing
       //Remove after Magic happens
-      event.data.ref.parent.parent.child('locked').once('value', locked => {
+      return event.data.ref.parent.parent.child('locked').once('value', locked => {
 
         if(locked.val() === true) {
           return event.data.ref.parent.parent.child('locked').set(false);

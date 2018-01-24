@@ -7,11 +7,12 @@ admin.initializeApp(functions.config().firebase);
 
 // Listens for new tries added to /testsubjects/:userId/:patternId/:tryId and
 // veriefies the try with the refcode
-exports.makeUppercase = functions.database.ref('/testsubjects/{userId}/{patternId}/{tryId}')
+exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/{tryId}/')
     .onWrite(event => {
+
       // Grab the current value of what was written to the Realtime Database.
       const original = event.data.val();
-      console.log('Uppercasing', event.params.userId, event.params.patternId, event.params.tryId, original);
+      console.log('Authorize: ', event.params.userId, event.params.patternId, event.params.tryId, original);
       
       //DO SOME MAGIC HERE
 

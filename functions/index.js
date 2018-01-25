@@ -28,14 +28,14 @@ exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/
           //Fehlschlag bei ungleicher Länge
           if(refcode.length !== tryData.length) return;
 
-          lastIndex = refcode.length - 1;
-          lastErr = tryData[lastIndex] - refcode[lastIndex];
+          let lastIndex = refcode.length - 1;
+          let lastErr = tryData[lastIndex] - refcode[lastIndex];
 
           //Fehlschlag falls Zeitfehler für Skalierung zu hoch
           if(Math.abs(lastErr) > refcode[lastIndex] * maxScaleErr) return;
           
           //Skalierung aller Werte und Fehlschlag bei zu großem Fehler
-          scale = refcode[lastIndex] / tryData[lastIndex];
+          let scale = refcode[lastIndex] / tryData[lastIndex];
           if(tryData.some((timestamp, index) => Math.abs((timestamp * scale) - refcode[index]) > maxErr)) return;
 
           //Passed Validation

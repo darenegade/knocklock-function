@@ -26,23 +26,29 @@ exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/
           let refcode = refcodeSnap.val();
 
           //Fehlschlag bei ungleicher Länge
-          if(refcode.length !== tryData.length) return;
+          if(refcode.length !== tryData.length){
+            event.data.ref.parent.parent.child('/sizeErr').set(1);
+            return;
+          } 
 
           let lastIndex = refcode.length - 1;
           let lastErr = tryData[lastIndex] - refcode[lastIndex];
 
           //Fehlschlag falls Zeitfehler für Skalierung zu hoch
-          if(Math.abs(lastErr) > refcode[lastIndex] * maxScaleErr) return;
+          if(Math.abs(lastErr) > refcode[lastIndex] * maxScaleErr) {
+            event.data.ref.parent.parent.child('/timeErr').set(1);
+            return;
+          } 
           
           //Skalierung aller Werte und Fehlschlag bei zu großem Fehler
           let scale = refcode[lastIndex] / tryData[lastIndex];
-          if(tryData.some((timestamp, index) => Math.abs((timestamp * scale) - refcode[index]) > maxErr)) return;
+          if(tryData.some((timestamp, index) => Math.abs((timestamp * scale) - refcode[index]) > maxErr)) {
+            event.data.ref.parent.parent.child('/deviationErr').set(1);
+            return;
+          } 
 
           //Passed Validation
-          event.data.ref.parent.child('/locked')
-            .once('value', lockedSnap => {
-              let locked = lockedSnap.val();
-              event.data.ref.parent.parent.child('/locked').set(!locked);
-            })
+          event.data.ref.parent.parent.child('/passed').set(1);
+          
         })
     });

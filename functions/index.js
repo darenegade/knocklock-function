@@ -27,7 +27,7 @@ exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/
 
           //Fehlschlag bei ungleicher Länge
           if(refcode.length !== tryData.length){
-            event.data.ref.parent.parent.child('/sizeErr').set(1);
+            event.data.ref.parent.child('/sizeErr').set(1);
             return;
           } 
 
@@ -36,19 +36,19 @@ exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/
 
           //Fehlschlag falls Zeitfehler für Skalierung zu hoch
           if(Math.abs(lastErr) > refcode[lastIndex] * maxScaleErr) {
-            event.data.ref.parent.parent.child('/timeErr').set(1);
+            event.data.ref.parent.child('/timeErr').set(1);
             return;
           } 
           
           //Skalierung aller Werte und Fehlschlag bei zu großem Fehler
           let scale = refcode[lastIndex] / tryData[lastIndex];
           if(tryData.some((timestamp, index) => Math.abs((timestamp * scale) - refcode[index]) > maxErr)) {
-            event.data.ref.parent.parent.child('/deviationErr').set(1);
+            event.data.ref.parent.child('/deviationErr').set(1);
             return;
           } 
 
           //Passed Validation
-          event.data.ref.parent.parent.child('/passed').set(1);
+          event.data.ref.parent.child('/passed').set(1);
           
         })
     });

@@ -39,7 +39,7 @@ exports.verifyAuth = functions.database.ref('/testsubjects/{userId}/{patternId}/
           if(tryData.some((timestamp, index) => Math.abs((timestamp * scale) - refcode[index]) > maxErr)) return;
 
           //Passed Validation
-          event.data.ref.parent.parent.child('/locked')
+          event.data.ref.parent.child('/locked')
             .once('value', lockedSnap => {
               let locked = lockedSnap.val();
               event.data.ref.parent.parent.child('/locked').set(!locked);
